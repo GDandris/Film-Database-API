@@ -8,13 +8,9 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class Film {
+public class Director {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private int releaseYear;
-    @ManyToOne
-    private Director director;
-
+    Long id;
+    String name;
 }

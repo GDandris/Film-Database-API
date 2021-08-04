@@ -47,8 +47,8 @@ public class FilmService {
     public void deleteFilmById(long id) {
         filmRepository.deleteById(id);
     }
-    /*
+
     public List<Film> getFilmsFromDirector(long directorId) {
+        return filmRepository.findFilmsByDirector_Id(directorId);
     }
-    */
 }

@@ -45,12 +45,11 @@ public class FilmController {
     public void deleteFilmById(@PathVariable long id) {
         filmService.deleteFilmById(id);
     }
-    /*
+
     @GetMapping("/director/{directorId}")
     public List<Film> getFilmsFromDirector(@PathVariable long directorId) {
         return filmService.getFilmsFromDirector(directorId);
     }
-    */
 
 
 }
