@@ -10,9 +10,11 @@ import java.util.List;
 public class DirectorService {
 
     private final DirectorRepository directorRepository;
+    private final FilmService filmService;
 
-    public DirectorService(DirectorRepository directorRepository) {
+    public DirectorService(DirectorRepository directorRepository, FilmService filmService) {
         this.directorRepository = directorRepository;
+        this.filmService = filmService;
     }
 
     public List<Director> listAllDirectors() {
@@ -29,6 +31,7 @@ public class DirectorService {
     }
 
     public void deleteDirector(long id) {
+        filmService.deleteFilmsFromDirector(id);
         directorRepository.deleteById(id);
     }
 }

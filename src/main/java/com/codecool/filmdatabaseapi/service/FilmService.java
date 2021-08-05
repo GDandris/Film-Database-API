@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -50,5 +51,10 @@ public class FilmService {
 
     public List<Film> getFilmsFromDirector(long directorId) {
         return filmRepository.findFilmsByDirector_Id(directorId);
+    }
+
+    public void deleteFilmsFromDirector(long directorId) {
+        List<Film> filmsFromDirector = filmRepository.findAll().stream().filter(film -> film.getDirector().getId().equals(directorId)).collect(Collectors.toList());
+        filmRepository.deleteAll(filmsFromDirector);
     }
 }

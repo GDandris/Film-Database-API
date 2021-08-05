@@ -51,5 +51,10 @@ public class FilmController {
         return filmService.getFilmsFromDirector(directorId);
     }
 
+    @DeleteMapping("/director/{directorId}")
+    public void deleteFilmsFromDirector(@PathVariable long directorId){
+        filmService.deleteFilmsFromDirector(directorId);
+    }
+
 
 }
