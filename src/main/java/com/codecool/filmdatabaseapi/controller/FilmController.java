@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/movie")
+@RequestMapping("/film")
 public class FilmController {
 
     private final FilmService filmService;
@@ -52,7 +52,7 @@ public class FilmController {
     }
 
     @DeleteMapping("/director/{directorId}")
-    public void deleteFilmsFromDirector(@PathVariable long directorId){
+    public void deleteFilmsFromDirector(@PathVariable long directorId) {
         filmService.deleteFilmsFromDirector(directorId);
     }
 
