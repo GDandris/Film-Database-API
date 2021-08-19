@@ -6,16 +6,25 @@ The project uses JPARepositories to persist these java objects into relational d
 There is a controller for both entities:
 
 "/movies" 					    GET: List all movies
+
 "/movies"			 		    POST: add new movies
+
 "/movies/year/{year}" 			GET: List all movies from given year
+
 "/movies/{id}"       		    GET: Return movie with given id
+
 "/movies/{id}"       		    PUT: Edit movie with given id
+
 "/movies/{id}"      		    DELETE: Delete movie with given id
+
 "/movies/director/{directorId}" GET: List all movies from director with given id
+
 "/movies/director/{directorId}" DELETE: Delete all movies from director with given id
 
-
 "/director"       GET: List all directors
+
 "/director"       POST: add new director
+
 "/dirtector/{id}" PUT: Edit director with given id
+
 "/dirtector/{id}" DELETE: delete director by id (deletes every movie by director first) 
