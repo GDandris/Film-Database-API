@@ -56,7 +56,7 @@ public class FilmIntegrationTests {
     }
 
     @Test
-    public void getFilms_notEmptyDatabase_shouldReturnFilmList(){
+    public void getFilms_notEmptyDatabase_returnsFilmList(){
         List<Film> testFilmList = new ArrayList<>();
         testFilmList.add(new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick")));
         testFilmList.add(new Film (null, "The Shining", 1980, new Director(1L, "Stanley Kubrick")));
@@ -96,6 +96,18 @@ public class FilmIntegrationTests {
         assertEquals(testFilm.getName(), result.getName());
         assertEquals(testFilm.getReleaseYear(), result.getReleaseYear());
         assertEquals(testFilm.getDirector().getName(), result.getDirector().getName());
+    }
+
+    @Test
+    public void updateFilmById_withOnePostedSong_returnsUpdatedFilm(){
+        Film testFilm = new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        testFilm = testRestTemplate.postForObject(baseUrl, testFilm, Film.class);
+
+        testFilm.setName("Updated name");
+        testRestTemplate.put(baseUrl + "/" + testFilm.getId(), testFilm);
+        Film updatedFilm = testRestTemplate.getForObject(baseUrl + "/" + testFilm.getId(), Film.class);
+
+        assertEquals("Updated name", updatedFilm.getName());
     }
 
 }
