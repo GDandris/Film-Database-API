@@ -22,8 +22,8 @@ public class FilmController {
     }
 
     @PostMapping
-    public void addNewFilm(@RequestBody Film film) {
-        filmService.addNewFilm(film);
+    public Film addNewFilm(@RequestBody Film film) {
+        return filmService.addNewFilm(film);
     }
 
     @GetMapping("/year/{year}")
@@ -37,8 +37,8 @@ public class FilmController {
     }
 
     @PutMapping("/{id}")
-    public void editFilm(@PathVariable long id, @RequestBody Film film){
-        filmService.editFilm(id, film);
+    public Film editFilm(@PathVariable long id, @RequestBody Film film){
+        return filmService.editFilm(id, film);
     }
 
     @DeleteMapping("/{id}")

@@ -22,13 +22,13 @@ public class DirectorController {
     }
 
     @PostMapping
-    public void addNewDirector(@RequestBody Director director) {
-        directorService.addNewDirector(director);
+    public Director addNewDirector(@RequestBody Director director) {
+        return directorService.addNewDirector(director);
     }
 
     @PutMapping("/{id}")
-    public void editDirector(@PathVariable long id, @RequestBody Director director) {
-        directorService.editDirector(id, director);
+    public Director editDirector(@PathVariable long id, @RequestBody Director director) {
+        return directorService.editDirector(id, director);
     }
 
     @DeleteMapping("/{id}")

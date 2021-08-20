@@ -21,13 +21,13 @@ public class DirectorService {
         return directorRepository.findAll();
     }
 
-    public void addNewDirector(Director director) {
-        directorRepository.save(director);
+    public Director addNewDirector(Director director) {
+        return directorRepository.save(director);
     }
 
-    public void editDirector(long id, Director director) {
+    public Director editDirector(long id, Director director) {
         director.setId(id);
-        directorRepository.save(director);
+        return directorRepository.save(director);
     }
 
     public void deleteDirector(long id) {

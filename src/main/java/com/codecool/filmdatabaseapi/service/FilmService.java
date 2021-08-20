@@ -22,8 +22,8 @@ public class FilmService {
         return filmRepository.findAll();
     }
 
-    public void addNewFilm(Film film) {
-        filmRepository.save(film);
+    public Film addNewFilm(Film film) {
+        return filmRepository.save(film);
     }
 
     public List<Film> getFilmsByYear(int year) {
@@ -40,9 +40,9 @@ public class FilmService {
         }
     }
 
-    public void editFilm(long id, Film film) {
+    public Film editFilm(long id, Film film) {
         film.setId(id);
-        filmRepository.save(film);
+        return filmRepository.save(film);
     }
 
     public void deleteFilmById(long id) {
