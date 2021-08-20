@@ -11,6 +11,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,4 +41,27 @@ public class DirectorIntegrationTest {
         assertEquals(testDirector.getName(), result.getName());
     }
 
+    @Test
+    public void getDirectors_emptyDatabase_returnsEmptyList() {
+        List<Director> testDirectors = List.of(testRestTemplate.getForObject(baseUrl, Director[].class));
+        assertEquals(0, testDirectors.size());
+    }
+
+    @Test
+    public void getDirectors_notEmptyDatabase_returnsDirectorList() {
+        List<Director> testDirectorList = new ArrayList<>();
+        testDirectorList.add(new Director(null, "Stanley Kubrick"));
+        testDirectorList.add(new Director(null, "Martin Scorsese"));
+
+        for (Director director: testDirectorList) {
+            testRestTemplate.postForObject(baseUrl, director, Director.class);
+        }
+
+        List<Director> result = List.of(testRestTemplate.getForObject(baseUrl, Director[].class));
+        assertEquals(testDirectorList.size(), result.size());
+
+        for(int i = 0; i< testDirectorList.size(); i++) {
+            assertEquals(testDirectorList.get(i).getName(), result.get(i).getName());
+        }
+    }
 }
