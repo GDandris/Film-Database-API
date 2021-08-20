@@ -64,4 +64,47 @@ public class DirectorIntegrationTest {
             assertEquals(testDirectorList.get(i).getName(), result.get(i).getName());
         }
     }
+
+    @Test
+    public void updateDirectorById_WithOneDirectorPosted_returnsUpdatedDirector() {
+        Director testDirector = new Director(null, "Stanley Kubrick");
+        testDirector = testRestTemplate.postForObject(baseUrl, testDirector, Director.class);
+
+        testDirector.setName("Updated name");
+        testRestTemplate.put(baseUrl + "/" + testDirector.getId(), testDirector);
+
+        Long finalTestDirectorId = testDirector.getId();
+        Director result = List.of(testRestTemplate.getForObject(baseUrl, Director[].class))
+                            .stream()
+                            .filter(director -> director.getId().equals(finalTestDirectorId))
+                            .findFirst()
+                            .orElse(null);
+
+        assertEquals(testDirector.getId(), result.getId());
+        assertEquals(testDirector.getName(), result.getName());
+    }
+
+    @Test
+    public void deleteDirectorById_WithMultiplePostedFilms_returnsRemainingDirectors() {
+        Director director1 = new Director(null, "Stanley Kubrick");
+        Director director2 = new Director(null, "Martin Scorsese");
+        Director director3 = new Director(null, "Akira Kurosawa");
+        List<Director> testDirectorList = new ArrayList<>();
+        testDirectorList.add(director1);
+        testDirectorList.add(director2);
+        testDirectorList.add(director3);
+
+        testDirectorList.forEach(director -> director.setId(testRestTemplate.postForObject(baseUrl, director, Director.class).getId()));
+
+        testRestTemplate.delete(baseUrl + "/" + director2.getId());
+        testDirectorList.remove(director2);
+
+        List<Director> remainingDirectors = List.of(testRestTemplate.getForObject(baseUrl, Director[].class));
+
+        assertEquals(testDirectorList.size(), remainingDirectors.size());
+        for(int i = 0; i < testDirectorList.size(); i++) {
+            assertEquals(testDirectorList.get(i).getName(), remainingDirectors.get(i).getName());
+        }
+
+    }
 }
