@@ -72,4 +72,30 @@ public class FilmIntegrationTests {
         }
     }
 
+    @Test
+    public void getFilmById_withOnePostedFilm_returnsFilmWithSameId() {
+        Film testFilm = new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        testFilm = testRestTemplate.postForObject(baseUrl, testFilm, Film.class);
+        Film result = testRestTemplate.getForObject(baseUrl + "/" + testFilm.getId(), Film.class);
+        assertEquals(testFilm.getId(), result.getId());
+        assertEquals(testFilm.getName(), result.getName());
+        assertEquals(testFilm.getReleaseYear(), result.getReleaseYear());
+        assertEquals(testFilm.getDirector().getName(), result.getDirector().getName());
+    }
+
+    @Test
+    public void getFilmById_withMultiplePostedFilms_returnsFilmWithSameId() {
+        Film film1 = new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        Film film2 = (new Film (null, "The Shining", 1980, new Director(1L, "Stanley Kubrick")));
+        Film film3 = (new Film (null, "Eyes Wide Shut", 1999, new Director(1L, "Stanley Kubrick")));
+        testRestTemplate.postForObject(baseUrl, film1, Film.class);
+        Film testFilm = testRestTemplate.postForObject(baseUrl, film2, Film.class);
+        testRestTemplate.postForObject(baseUrl, film3, Film.class);
+        Film result = testRestTemplate.getForObject(baseUrl + "/" + testFilm.getId(), Film.class);
+        assertEquals(testFilm.getId(), result.getId());
+        assertEquals(testFilm.getName(), result.getName());
+        assertEquals(testFilm.getReleaseYear(), result.getReleaseYear());
+        assertEquals(testFilm.getDirector().getName(), result.getDirector().getName());
+    }
+
 }
