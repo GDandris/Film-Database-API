@@ -1,7 +1,6 @@
 package com.codecool.filmdatabaseapi.integration;
 
 import com.codecool.filmdatabaseapi.model.Director;
-import com.codecool.filmdatabaseapi.model.Film;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
