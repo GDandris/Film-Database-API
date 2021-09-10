@@ -35,18 +35,18 @@ public class TagService {
         tagRepository.deleteById(id);
     }
 
-    public void addTagToMovie(Long filmId, Long tagId){
-        String sql = "INSERT INTO FILM_TAGS (?,?) VALUES" + filmId + ", " + tagId + ";";
+    public void addTagToFilm(Long tagId, Long filmId){
+        String sql = "INSERT INTO FILM_TAGS  VALUES (" + filmId + ", " + tagId + ");";
         jdbcTemplate.update(sql);
     }
 
-    public void removeTagFromMovie(Long filmId, Long tagId){
-        String sql = "DELETE FROM FILM_TAGS WHERE FILM_ID IS" + filmId + "AND TAG_ID" + tagId + ";";
+    public void removeTagFromFilm(Long tagId, Long filmId){
+        String sql = "DELETE FROM FILM_TAGS WHERE FILM_ID = " + filmId + " AND TAGS_ID = " + tagId + ";";
         jdbcTemplate.update(sql);
     }
 
-    public void removeTagFromAllMovies(Long tagId) {
-        String sql = "DELETE FROM FILM_TAGS WHERE TAG_ID" + tagId + ";";
+    public void removeTagFromAllFilms(Long tagId) {
+        String sql = "DELETE FROM FILM_TAGS WHERE TAGS_ID = " + tagId + ";";
         jdbcTemplate.update(sql);
     }
 }
