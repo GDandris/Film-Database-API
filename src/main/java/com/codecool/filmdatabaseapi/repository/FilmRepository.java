@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface FilmRepository extends JpaRepository<Film, Long> {
     List<Film> findFilmsByReleaseYear (int releaseYear);
-    List<Film> findFilmsByDirector_Id(long id);
+    List<Film> findFilmsByDirector_Id(Long id);
 }

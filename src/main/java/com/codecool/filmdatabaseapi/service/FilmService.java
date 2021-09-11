@@ -40,21 +40,29 @@ public class FilmService {
         }
     }
 
-    public Film editFilm(long id, Film film) {
+    public Film editFilm(Long id, Film film) {
         film.setId(id);
         return filmRepository.save(film);
     }
 
-    public void deleteFilmById(long id) {
+    public void deleteFilmById(Long id) {
         filmRepository.deleteById(id);
     }
 
-    public List<Film> getFilmsFromDirector(long directorId) {
+    public List<Film> getFilmsFromDirector(Long directorId) {
         return filmRepository.findFilmsByDirector_Id(directorId);
     }
 
-    public void deleteFilmsFromDirector(long directorId) {
-        List<Film> filmsFromDirector = filmRepository.findAll().stream().filter(film -> film.getDirector().getId().equals(directorId)).collect(Collectors.toList());
+    public void deleteFilmsFromDirector(Long directorId) {
+        List<Film> filmsFromDirector = filmRepository.findAll().stream()
+                .filter(film -> film.getDirector().getId().equals(directorId))
+                .collect(Collectors.toList());
         filmRepository.deleteAll(filmsFromDirector);
+    }
+
+    public List<Film> findFilmsByTagId(Long tagId) {
+        return filmRepository.findAll().stream()
+                .filter(film -> film.getTags().stream().anyMatch(tag -> tag.getId().equals(tagId)))
+                .collect(Collectors.toList());
     }
 }
