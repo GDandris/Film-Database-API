@@ -1,6 +1,7 @@
 package com.codecool.filmdatabaseapi.service;
 
 import com.codecool.filmdatabaseapi.model.Film;
+import com.codecool.filmdatabaseapi.model.Tag;
 import com.codecool.filmdatabaseapi.repository.FilmRepository;
 import org.springframework.stereotype.Service;
 
@@ -60,9 +61,12 @@ public class FilmService {
         filmRepository.deleteAll(filmsFromDirector);
     }
 
-    public List<Film> findFilmsByTagId(Long tagId) {
+    public List<Film> findFilmsByTagIds(List<Long> tagIds) {
         return filmRepository.findAll().stream()
-                .filter(film -> film.getTags().stream().anyMatch(tag -> tag.getId().equals(tagId)))
+                .filter(film -> film.getTags().stream()
+                        .map(Tag::getId)
+                        .collect(Collectors.toList())
+                        .containsAll(tagIds))
                 .collect(Collectors.toList());
     }
 }

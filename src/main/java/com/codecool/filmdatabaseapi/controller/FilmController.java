@@ -32,33 +32,33 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Film getFilmById(@PathVariable long id) {
+    public Film getFilmById(@PathVariable Long id) {
         return filmService.getFilmById(id);
     }
 
     @PutMapping("/{id}")
-    public Film editFilm(@PathVariable long id, @RequestBody Film film){
+    public Film editFilm(@PathVariable Long id, @RequestBody Film film){
         return filmService.editFilm(id, film);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFilmById(@PathVariable long id) {
+    public void deleteFilmById(@PathVariable Long id) {
         filmService.deleteFilmById(id);
     }
 
     @GetMapping("/director/{directorId}")
-    public List<Film> getFilmsFromDirector(@PathVariable long directorId) {
+    public List<Film> getFilmsFromDirector(@PathVariable Long directorId) {
         return filmService.getFilmsFromDirector(directorId);
     }
 
     @DeleteMapping("/director/{directorId}")
-    public void deleteFilmsFromDirector(@PathVariable long directorId) {
+    public void deleteFilmsFromDirector(@PathVariable Long directorId) {
         filmService.deleteFilmsFromDirector(directorId);
     }
 
-    @GetMapping("/tag/{tagId}")
-    public List<Film> findFilmsByTag(@PathVariable Long tagId) {
-       return filmService.findFilmsByTagId(tagId);
+    @GetMapping("/tag")
+    public List<Film> findFilmsByTagIds(@RequestParam(name = "tagId") List<Long> tagIds) {
+       return filmService.findFilmsByTagIds(tagIds);
     }
 
 
