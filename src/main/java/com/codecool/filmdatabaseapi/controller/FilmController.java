@@ -56,7 +56,7 @@ public class FilmController {
         filmService.deleteFilmsFromDirector(directorId);
     }
 
-    @GetMapping("/tag")
+    @GetMapping("/tag/{tagId}")
     public List<Film> findFilmsByTag(@PathVariable Long tagId) {
        return filmService.findFilmsByTagId(tagId);
     }
