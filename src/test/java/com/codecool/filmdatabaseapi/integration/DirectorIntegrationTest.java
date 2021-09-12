@@ -35,7 +35,7 @@ public class DirectorIntegrationTest {
 
     @Test
     public void addNewDirector_emptyDatabase_shouldReturnSameDirector() {
-        Director testDirector = new Director(null, "Stanley Kubrick");
+        Director testDirector = new Director("Stanley Kubrick");
         Director result = testRestTemplate.postForObject(baseUrl, testDirector, Director.class);
         assertEquals(testDirector.getName(), result.getName());
     }
@@ -49,8 +49,8 @@ public class DirectorIntegrationTest {
     @Test
     public void getDirectors_notEmptyDatabase_returnsDirectorList() {
         List<Director> testDirectorList = new ArrayList<>();
-        testDirectorList.add(new Director(null, "Stanley Kubrick"));
-        testDirectorList.add(new Director(null, "Martin Scorsese"));
+        testDirectorList.add(new Director("Stanley Kubrick"));
+        testDirectorList.add(new Director("Martin Scorsese"));
 
         for (Director director: testDirectorList) {
             testRestTemplate.postForObject(baseUrl, director, Director.class);
@@ -66,7 +66,7 @@ public class DirectorIntegrationTest {
 
     @Test
     public void updateDirectorById_WithOneDirectorPosted_returnsUpdatedDirector() {
-        Director testDirector = new Director(null, "Stanley Kubrick");
+        Director testDirector = new Director("Stanley Kubrick");
         testDirector = testRestTemplate.postForObject(baseUrl, testDirector, Director.class);
 
         testDirector.setName("Updated name");

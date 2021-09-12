@@ -2,6 +2,7 @@ package com.codecool.filmdatabaseapi.integration;
 
 import com.codecool.filmdatabaseapi.model.Director;
 import com.codecool.filmdatabaseapi.model.Film;
+import com.codecool.filmdatabaseapi.model.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class FilmIntegrationTests {
     @BeforeEach
     public void setUp() {
         this.baseUrl = "http://localhost:" + port + "/film";
-        Director director = new Director(1L, "Stanley Kubrick");
+        Director director = new Director("Stanley Kubrick");
         testRestTemplate.postForObject("http://localhost:" + port + "/director", director, Director.class);
     }
 
@@ -44,9 +45,7 @@ public class FilmIntegrationTests {
         director.setName("Stanley Kubrick");
         testFilm.setDirector(director);
         Film result = testRestTemplate.postForObject(baseUrl, testFilm, Film.class);
-        assertEquals(testFilm.getName(), result.getName());
-        assertEquals(testFilm.getReleaseYear(), result.getReleaseYear());
-        assertEquals(testFilm.getDirector().getName(), result.getDirector().getName());
+        assertEquals(testFilm, result);
     }
 
     @Test
@@ -58,49 +57,51 @@ public class FilmIntegrationTests {
     @Test
     public void getFilms_notEmptyDatabase_returnsFilmList(){
         List<Film> testFilmList = new ArrayList<>();
-        testFilmList.add(new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick")));
-        testFilmList.add(new Film ("The Shining", 1980, new Director(1L, "Stanley Kubrick")));
+        Director director = new Director("Stanley Kubrick");
+        director.setId(1L);
+        testFilmList.add(new Film ("Full Metal Jacket", 1987, director));
+        testFilmList.add(new Film ("The Shining", 1980, director));
         for (Film film : testFilmList) {
             testRestTemplate.postForObject(baseUrl, film, Film.class);
         }
         List<Film> filmList = List.of(testRestTemplate.getForObject(baseUrl, Film[].class));
         assertEquals(testFilmList.size(), filmList.size());
         for( int i = 0; i < testFilmList.size(); i++) {
-            assertEquals(testFilmList.get(i).getName(), filmList.get(i).getName());
-            assertEquals(testFilmList.get(i).getReleaseYear(), filmList.get(i).getReleaseYear());
-            assertEquals(testFilmList.get(i).getDirector().getName(), filmList.get(i).getDirector().getName());
+            assertEquals(testFilmList.get(i), filmList.get(i));
         }
     }
 
     @Test
     public void getFilmById_withOnePostedFilm_returnsFilmWithSameId() {
-        Film testFilm = new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        Director director = new Director("Stanley Kubrick");
+        director.setId(1L);
+        Film testFilm = new Film ("Full Metal Jacket", 1987, director);
         testFilm = testRestTemplate.postForObject(baseUrl, testFilm, Film.class);
         Film result = testRestTemplate.getForObject(baseUrl + "/" + testFilm.getId(), Film.class);
         assertEquals(testFilm.getId(), result.getId());
-        assertEquals(testFilm.getName(), result.getName());
-        assertEquals(testFilm.getReleaseYear(), result.getReleaseYear());
-        assertEquals(testFilm.getDirector().getName(), result.getDirector().getName());
+        assertEquals(testFilm, result);
     }
 
     @Test
     public void getFilmById_withMultiplePostedFilms_returnsFilmWithSameId() {
-        Film film1 = new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
-        Film film2 = (new Film ("The Shining", 1980, new Director(1L, "Stanley Kubrick")));
-        Film film3 = (new Film ("Eyes Wide Shut", 1999, new Director(1L, "Stanley Kubrick")));
+        Director director = new Director("Stanley Kubrick");
+        director.setId(1L);
+        Film film1 = new Film ("Full Metal Jacket", 1987, director);
+        Film film2 = (new Film ("The Shining", 1980, director));
+        Film film3 = (new Film ("Eyes Wide Shut", 1999, director));
         testRestTemplate.postForObject(baseUrl, film1, Film.class);
         Film testFilm = testRestTemplate.postForObject(baseUrl, film2, Film.class);
         testRestTemplate.postForObject(baseUrl, film3, Film.class);
         Film result = testRestTemplate.getForObject(baseUrl + "/" + testFilm.getId(), Film.class);
         assertEquals(testFilm.getId(), result.getId());
-        assertEquals(testFilm.getName(), result.getName());
-        assertEquals(testFilm.getReleaseYear(), result.getReleaseYear());
-        assertEquals(testFilm.getDirector().getName(), result.getDirector().getName());
+        assertEquals(testFilm, result);
     }
 
     @Test
     public void updateFilmById_withOnePostedFilm_returnsUpdatedFilm(){
-        Film testFilm = new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        Director director = new Director("Stanley Kubrick");
+        director.setId(1L);
+        Film testFilm = new Film ("Full Metal Jacket", 1987, director);
         testFilm = testRestTemplate.postForObject(baseUrl, testFilm, Film.class);
 
         testFilm.setName("Updated name");
@@ -112,9 +113,11 @@ public class FilmIntegrationTests {
 
     @Test
     public void deleteFilmById_withMultiplePostedFilms_returnsRemainingFilms(){
-        Film film1 = new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
-        Film film2 = new Film ("The Shining", 1980, new Director(1L, "Stanley Kubrick"));
-        Film film3 = new Film ("Eyes Wide Shut", 1999, new Director(1L, "Stanley Kubrick"));
+        Director director = new Director("Stanley Kubrick");
+        director.setId(1L);
+        Film film1 = new Film ("Full Metal Jacket", 1987, director);
+        Film film2 = new Film ("The Shining", 1980, director);
+        Film film3 = new Film ("Eyes Wide Shut", 1999, director);
         List<Film> testFilms = new ArrayList<>();
         testFilms.add(film1);
         testFilms.add(film2);
@@ -130,9 +133,7 @@ public class FilmIntegrationTests {
         assertEquals(testFilms.size(), remainingFilms.size());
 
         for(int i = 0; i< testFilms.size(); i++) {
-            assertEquals(testFilms.get(i).getName(), remainingFilms.get(i).getName());
-            assertEquals(testFilms.get(i).getReleaseYear(), remainingFilms.get(i).getReleaseYear());
-            assertEquals(testFilms.get(i).getDirector().getName(), remainingFilms.get(i).getDirector().getName());
+            assertEquals(testFilms.get(i), remainingFilms.get(i));
         }
 
 
