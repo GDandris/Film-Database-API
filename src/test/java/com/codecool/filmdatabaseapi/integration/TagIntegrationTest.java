@@ -10,6 +10,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,5 +38,25 @@ public class TagIntegrationTest {
         Tag testTag = new Tag("Fantasy");
         Tag result = testRestTemplate.postForObject(baseUrl, testTag, Tag.class);
         assertEquals(testTag, result);
+    }
+
+    @Test
+    public void getAllTags_emptyDatabase_returnsEmptyList() {
+        List<Tag> tags = List.of(testRestTemplate.getForObject(baseUrl, Tag[].class));
+        assertEquals(0, tags.size());
+    }
+
+    @Test
+    public void getAllTags_notEmptyDatabase_returnsTagList() {
+        List<Tag> testTagList = new ArrayList<>();
+        testTagList.add(new Tag("Fantasy"));
+        testTagList.add(new Tag("Drama"));
+
+        for (Tag tag : testTagList) {
+            testRestTemplate.postForObject(baseUrl, tag, Tag.class);
+        }
+
+        List<Tag> result = List.of(testRestTemplate.getForObject(baseUrl, Tag[].class));
+        assertEquals(testTagList, result);
     }
 }

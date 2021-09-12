@@ -60,7 +60,7 @@ public class DirectorIntegrationTest {
         assertEquals(testDirectorList.size(), result.size());
 
         for(int i = 0; i< testDirectorList.size(); i++) {
-            assertEquals(testDirectorList.get(i).getName(), result.get(i).getName());
+            assertEquals(testDirectorList.get(i), result.get(i));
         }
     }
 
@@ -80,7 +80,7 @@ public class DirectorIntegrationTest {
                             .orElse(null);
 
         assertEquals(testDirector.getId(), result.getId());
-        assertEquals(testDirector.getName(), result.getName());
+        assertEquals(testDirector, result);
     }
 
     @Test
