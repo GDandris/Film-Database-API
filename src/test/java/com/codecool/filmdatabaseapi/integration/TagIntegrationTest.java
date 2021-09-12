@@ -30,5 +30,10 @@ public class TagIntegrationTest {
         this.baseUrl = "http://localhost:" + port + "/tag";
     }
 
-
+    @Test
+    public void addNewTag_emptyDatabase_returnsSameTag() {
+        Tag testTag = new Tag("Fantasy");
+        Tag result = testRestTemplate.postForObject(baseUrl, testTag, Tag.class);
+        assertEquals(testTag, result);
+    }
 }
