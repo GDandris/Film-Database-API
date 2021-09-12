@@ -72,12 +72,7 @@ public class DirectorIntegrationTest {
         testDirector.setName("Updated name");
         testRestTemplate.put(baseUrl + "/" + testDirector.getId(), testDirector);
 
-        Long finalTestDirectorId = testDirector.getId();
-        Director result = List.of(testRestTemplate.getForObject(baseUrl, Director[].class))
-                            .stream()
-                            .filter(director -> director.getId().equals(finalTestDirectorId))
-                            .findFirst()
-                            .orElse(null);
+        Director result = testRestTemplate.getForObject(baseUrl, Director[].class)[0];
 
         assertEquals(testDirector.getId(), result.getId());
         assertEquals(testDirector, result);

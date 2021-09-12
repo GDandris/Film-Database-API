@@ -59,4 +59,20 @@ public class TagIntegrationTest {
         List<Tag> result = List.of(testRestTemplate.getForObject(baseUrl, Tag[].class));
         assertEquals(testTagList, result);
     }
+
+    @Test
+    public void updateTagById_withOneDirectorPosted_returnsUpdatedTag() {
+        Tag testTag = new Tag("Fantasy");
+        testTag = testRestTemplate.postForObject(baseUrl, testTag, Tag.class);
+
+        testTag.setName("updatedName");
+
+        testRestTemplate.put(baseUrl+ "/"+ testTag.getId(), testTag);
+
+        Tag result = testRestTemplate.getForObject(baseUrl, Tag[].class)[0];
+
+        assertEquals(testTag.getId(), result.getId());
+        assertEquals(testTag, result);
+    }
+
 }
