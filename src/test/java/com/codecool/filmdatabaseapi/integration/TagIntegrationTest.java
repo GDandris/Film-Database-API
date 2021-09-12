@@ -101,7 +101,7 @@ public class TagIntegrationTest {
     }
 
     @Test
-    public void addTagToMovie_withOneFilmPostedWithoutTags_returnsFilmWithTags() {
+    public void addTagToFilm_withOneFilmPostedWithoutTags_returnsFilmWithTags() {
         Director director = new Director();
         director.setId(1L);
         director.setName("Stanley Kubrick");
@@ -118,4 +118,31 @@ public class TagIntegrationTest {
 
         assertEquals(tags, resultFilm.getTags());
     }
+
+    @Test
+    public void deleteTagFromFilm_withOneFilmPostedWithMultipleTags_returnsFilmWithRemainingTags () {
+        Director director = new Director();
+        director.setId(1L);
+        director.setName("Stanley Kubrick");
+        Film testFilm = new Film("Paths of Glory", 1957, director);
+        Tag tag1 = new Tag("War");
+        tag1.setId(1L);
+        Tag tag2 = new Tag("Sci-fi");
+        tag2.setId(2L);
+        List<Tag> tags = List.of(tag1, tag2);
+        testFilm.setTags(tags);
+
+        testRestTemplate.postForObject("http://localhost:" + port + "/director", director, Director.class);
+        testFilm =testRestTemplate.postForObject("http://localhost:" + port + "/film", testFilm, Film.class);
+        tag1 = testRestTemplate.postForObject(baseUrl, tag1, Tag.class);
+        tag2 = testRestTemplate.postForObject(baseUrl, tag2, Tag.class);
+
+        testRestTemplate.delete(baseUrl + "/"+ tag2.getId() +"/film/" + testFilm.getId());
+
+        testFilm.getTags().remove(tag2);
+        Film resultFilm = testRestTemplate.getForObject("http://localhost:" + port + "/film/" + testFilm.getId(), Film.class);
+
+        assertEquals(testFilm.getTags(), resultFilm.getTags());
+    }
+
 }
