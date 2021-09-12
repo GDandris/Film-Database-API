@@ -34,10 +34,10 @@ public class DirectorIntegrationTest {
     }
 
     @Test
-    public void addNewDirector_emptyDatabase_shouldReturnSameDirector() {
+    public void addNewDirector_emptyDatabase_returnsSameDirector() {
         Director testDirector = new Director("Stanley Kubrick");
         Director result = testRestTemplate.postForObject(baseUrl, testDirector, Director.class);
-        assertEquals(testDirector.getName(), result.getName());
+        assertEquals(testDirector, result);
     }
 
     @Test
