@@ -75,4 +75,24 @@ public class TagIntegrationTest {
         assertEquals(testTag, result);
     }
 
+    @Test
+    public void deleteTagById_withMultipleTagsPosted_returnsRemainingTags() {
+        Tag tag1 = new Tag("Fantasy");
+        Tag tag2 = new Tag("Drama");
+        Tag tag3 = new Tag("Action");
+
+        List<Tag> testTagList = new ArrayList<>();
+        testTagList.add(tag1);
+        testTagList.add(tag2);
+        testTagList.add(tag3);
+
+        testTagList.forEach(tag -> tag.setId(testRestTemplate.postForObject(baseUrl, tag, Tag.class).getId()));
+
+        testRestTemplate.delete(baseUrl + "/" + tag2.getId());
+        testTagList.remove(tag2);
+
+        List<Tag> remainingTags = List.of(testRestTemplate.getForObject(baseUrl, Tag[].class));
+
+        assertEquals(testTagList, remainingTags);
+    }
 }
