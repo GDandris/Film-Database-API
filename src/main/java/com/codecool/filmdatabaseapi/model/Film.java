@@ -1,6 +1,5 @@
 package com.codecool.filmdatabaseapi.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,12 +7,12 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +30,16 @@ public class Film {
         this.director = director;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Film film = (Film) o;
+        return releaseYear == film.releaseYear && name.equals(film.name) && director.equals(film.director);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, releaseYear, director);
+    }
 }
