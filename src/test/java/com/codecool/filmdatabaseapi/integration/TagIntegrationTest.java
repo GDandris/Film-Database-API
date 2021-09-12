@@ -1,5 +1,7 @@
 package com.codecool.filmdatabaseapi.integration;
 
+import com.codecool.filmdatabaseapi.model.Director;
+import com.codecool.filmdatabaseapi.model.Film;
 import com.codecool.filmdatabaseapi.model.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,5 +98,24 @@ public class TagIntegrationTest {
         List<Tag> remainingTags = List.of(testRestTemplate.getForObject(baseUrl, Tag[].class));
 
         assertEquals(testTagList, remainingTags);
+    }
+
+    @Test
+    public void addTagToMovie_withOneFilmPostedWithoutTags_returnsFilmWithTags() {
+        Director director = new Director();
+        director.setId(1L);
+        director.setName("Stanley Kubrick");
+        Film testFilm = new Film("Paths of Glory", 1957, director);
+        Tag testTag = new Tag("War");
+
+        testRestTemplate.postForObject("http://localhost:" + port + "/director", director, Director.class);
+        testFilm =testRestTemplate.postForObject("http://localhost:" + port + "/film", testFilm, Film.class);
+        testTag = testRestTemplate.postForObject(baseUrl, testTag, Tag.class);
+        testRestTemplate.postForObject(baseUrl + "/" + testTag.getId() + "/film/" + testFilm.getId(), null, Tag.class);
+
+        Film resultFilm = testRestTemplate.getForObject("http://localhost:" + port + "/film/" + testFilm.getId(), Film.class);
+        List<Tag> tags = List.of(testTag);
+
+        assertEquals(tags, resultFilm.getTags());
     }
 }
