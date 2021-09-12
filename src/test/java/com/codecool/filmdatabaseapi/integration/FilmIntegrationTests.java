@@ -38,7 +38,7 @@ public class FilmIntegrationTests {
 
     @Test
     public void addNewFilm_emptyDatabase_shouldReturnSameFilm() {
-        Film testFilm = new Film(null, "Full Metal Jacket", 1987, null);
+        Film testFilm = new Film("Full Metal Jacket", 1987, null);
         Director director = new Director();
         director.setId(1L);
         director.setName("Stanley Kubrick");
@@ -58,8 +58,8 @@ public class FilmIntegrationTests {
     @Test
     public void getFilms_notEmptyDatabase_returnsFilmList(){
         List<Film> testFilmList = new ArrayList<>();
-        testFilmList.add(new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick")));
-        testFilmList.add(new Film (null, "The Shining", 1980, new Director(1L, "Stanley Kubrick")));
+        testFilmList.add(new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick")));
+        testFilmList.add(new Film ("The Shining", 1980, new Director(1L, "Stanley Kubrick")));
         for (Film film : testFilmList) {
             testRestTemplate.postForObject(baseUrl, film, Film.class);
         }
@@ -74,7 +74,7 @@ public class FilmIntegrationTests {
 
     @Test
     public void getFilmById_withOnePostedFilm_returnsFilmWithSameId() {
-        Film testFilm = new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        Film testFilm = new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
         testFilm = testRestTemplate.postForObject(baseUrl, testFilm, Film.class);
         Film result = testRestTemplate.getForObject(baseUrl + "/" + testFilm.getId(), Film.class);
         assertEquals(testFilm.getId(), result.getId());
@@ -85,9 +85,9 @@ public class FilmIntegrationTests {
 
     @Test
     public void getFilmById_withMultiplePostedFilms_returnsFilmWithSameId() {
-        Film film1 = new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
-        Film film2 = (new Film (null, "The Shining", 1980, new Director(1L, "Stanley Kubrick")));
-        Film film3 = (new Film (null, "Eyes Wide Shut", 1999, new Director(1L, "Stanley Kubrick")));
+        Film film1 = new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        Film film2 = (new Film ("The Shining", 1980, new Director(1L, "Stanley Kubrick")));
+        Film film3 = (new Film ("Eyes Wide Shut", 1999, new Director(1L, "Stanley Kubrick")));
         testRestTemplate.postForObject(baseUrl, film1, Film.class);
         Film testFilm = testRestTemplate.postForObject(baseUrl, film2, Film.class);
         testRestTemplate.postForObject(baseUrl, film3, Film.class);
@@ -100,7 +100,7 @@ public class FilmIntegrationTests {
 
     @Test
     public void updateFilmById_withOnePostedFilm_returnsUpdatedFilm(){
-        Film testFilm = new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        Film testFilm = new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
         testFilm = testRestTemplate.postForObject(baseUrl, testFilm, Film.class);
 
         testFilm.setName("Updated name");
@@ -112,9 +112,9 @@ public class FilmIntegrationTests {
 
     @Test
     public void deleteFilmById_withMultiplePostedFilms_returnsRemainingFilms(){
-        Film film1 = new Film (null, "Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
-        Film film2 = new Film (null, "The Shining", 1980, new Director(1L, "Stanley Kubrick"));
-        Film film3 = new Film (null, "Eyes Wide Shut", 1999, new Director(1L, "Stanley Kubrick"));
+        Film film1 = new Film ("Full Metal Jacket", 1987, new Director(1L, "Stanley Kubrick"));
+        Film film2 = new Film ("The Shining", 1980, new Director(1L, "Stanley Kubrick"));
+        Film film3 = new Film ("Eyes Wide Shut", 1999, new Director(1L, "Stanley Kubrick"));
         List<Film> testFilms = new ArrayList<>();
         testFilms.add(film1);
         testFilms.add(film2);

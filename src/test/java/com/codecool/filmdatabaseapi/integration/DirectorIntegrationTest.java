@@ -85,9 +85,9 @@ public class DirectorIntegrationTest {
 
     @Test
     public void deleteDirectorById_WithMultiplePostedFilms_returnsRemainingDirectors() {
-        Director director1 = new Director(null, "Stanley Kubrick");
-        Director director2 = new Director(null, "Martin Scorsese");
-        Director director3 = new Director(null, "Akira Kurosawa");
+        Director director1 = new Director("Stanley Kubrick");
+        Director director2 = new Director("Martin Scorsese");
+        Director director3 = new Director("Akira Kurosawa");
         List<Director> testDirectorList = new ArrayList<>();
         testDirectorList.add(director1);
         testDirectorList.add(director2);

@@ -25,8 +25,7 @@ public class Film {
     @ManyToMany
     private List<Tag> tags = new ArrayList<>();
 
-    public Film(Long id, String name, int releaseYear, Director director) {
-        this.id = id;
+    public Film(String name, int releaseYear, Director director) {
         this.name = name;
         this.releaseYear = releaseYear;
         this.director = director;
