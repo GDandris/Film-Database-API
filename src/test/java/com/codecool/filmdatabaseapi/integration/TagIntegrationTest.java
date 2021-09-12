@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpMethod;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,5 +142,34 @@ public class TagIntegrationTest {
 
         assertEquals(testFilm.getTags(), resultFilm.getTags());
     }
+    @Test
+    public void deleteTagFromAllFilms_withMultipleFilmPostedWithMultipleTags_returnsFilmsWithRemainingTags () {
+        Director director = new Director();
+        director.setId(1L);
+        director.setName("Stanley Kubrick");
+        Film film1 = new Film("Paths of Glory", 1957, director);
+        Film film2 = new Film("Full Metal Jacket", 1987, director);
+        Tag tag1 = new Tag("War");
+        Tag tag2 = new Tag("Sci-fi");
+        tag1 = testRestTemplate.postForObject(baseUrl, tag1, Tag.class);
+        tag2 = testRestTemplate.postForObject(baseUrl, tag2, Tag.class);
+        List<Tag> tags = List.of(tag1, tag2);
+        film1.setTags(tags);
+        film2.setTags(tags);
 
+        testRestTemplate.postForObject("http://localhost:" + port + "/director", director, Director.class);
+        film1 =testRestTemplate.postForObject("http://localhost:" + port + "/film", film1, Film.class);
+        film2 =testRestTemplate.postForObject("http://localhost:" + port + "/film", film2, Film.class);
+
+        testRestTemplate.delete(baseUrl + "/"+ tag2.getId() +"/film/all");
+
+        film1.getTags().remove(tag2);
+        film2.getTags().remove(tag2);
+        List<Film> testFilmList = List.of(film1, film2);
+        List<Film> resultFilmList = List.of(testRestTemplate.getForObject("http://localhost:" + port + "/film", Film[].class));
+
+        for(int i = 0; i< testFilmList.size(); i++) {
+            assertEquals(testFilmList.get(i).getTags(), resultFilmList.get(i).getTags());
+        }
+    }
 }
