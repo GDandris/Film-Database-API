@@ -1,6 +1,6 @@
 # Film-Database-API
 
-This project is a REST API for a film database where we can save 2 entities, Films and Directors.
+This project is a REST API for a film database where we can save 3 entities, Films and Directors and tags.
 There is a relation between them as every movie has a director(ManyToOne).
 The project uses JPARepositories to persist these java objects into relational databases.
 There is a controller for both entities:
